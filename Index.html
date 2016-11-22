@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="no" ng-app="app" ng-controller="controller as vm">
+<head>
+     <meta name="robots" content="noindex">
+     <meta name="googlebot" content="noindex">
+     <meta name="viewport" content="width=device-width, initial-scale=1">
+     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <title>Julekalender Novanet</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://bootswatch.com/sandstone/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+    <style>
+        [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+            display: none !important;
+        }        
+        .nav-tabs>li,.nav-pills>li {margin:32px;float:none;display:inline-block;*display:inline; /* ie7 fix */zoom:1; /* hasLayout ie7 trigger */}
+        .nav-tabs,.nav-pills{text-align:center;}
+        .badge{padding:100px;font-size:48px;}
+        .luke{background-color: #d42426;background-size:cover; background-repeat: no-repeat;opacity:0.8;-khtml-opacity:.80;-moz-opacity:.80;-ms-filter:"alpha(opacity=80)";filter:alpha(opacity=80);filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0.8);}
+        .nav>li>a{padding: 0px; margin: 0px;display: inline;display:inline-block;*display:inline;float:left;}
+        .nav>li>a:hover{border-color: transparent}    
+        .logo-left{margin-left:28px;width:150px;padding:20px;border-radius:6%;}        
+        @media screen and (min-width: 480px) {.logo-left{position:relative;float:left;left:200px;margin-left:-200px;}}        
+    </style>
+</head>
+<body>   
+    <div class="jumbotron" style="margin:auto;text-align:center;max-width:1600px;">            
+        <a href="http://www.novanet.no"><img src="http://novanet.no/Content/Images/novanet-logo.svg" class="logo-left"></a>               
+        <h1 style="margin-bottom:20px;">Julekalender</h1>   
+        <br>
+        <hr>
+        <div ng-if="vm.isBusyLoading" style="text-align:center;"><i class="fa fa-spinner fa-pulse fa-3x fa-fw"></i></div>
+        <div class="row" ng-if="!vm.isBusyLoading" ng-cloak>        
+            <div class="col col-lg-4">
+                <h3>Dagens luke</h3>
+                <br/>       
+                <ul class="nav nav-pills" style="padding:0;" ng-cloak>
+                    <li role="presentation" ng-repeat="cal in ::vm.calendar track by cal.Id" ng-if="::cal.IsToday" style="padding:0;margin:0;">
+                        {{::cal.ForDate | date:'dd.MMM'}}<br />
+                        <a ng-href="{{::cal.Image}}" target="_blank">
+                            <span class="badge luke" ng-style="{'background-image': 'url({{ ::cal.Image }})'}" ng-cloak>{{::cal.Id}}</span>                        
+                        </a>                                        
+                    </li>          
+                </ul>   
+            </div>
+            <div class="col col-lg-4">
+                <h3>Svar på dagens luke</h3>
+                <br/><br/>
+                <div ng-if="vm.todayHasImage === false" ng-cloak>Ingen luke i dag</div>
+                <div ng-if="vm.todayHasImage === true" ng-cloak>
+                    <form class="form-horizontal" ng-if="!vm.hasAnswered" style="padding:20px;">
+                        <fieldset>
+                            <div class="form-group">    
+                                <label for="select" class="col-lg-2 control-label">Bruker</label>
+                                <div class="col-lg-10">
+                                    <select class="form-control" id="select" ng-model="vm.answer.user">
+                                    <option>Velg bruker</option>
+                                    <option>Anders</option>
+                                    <option>Christian</option>
+                                    <option>Dmitry</option>
+                                    <option>Hallstein</option>
+                                    <option>Hans Arne</option>
+                                    <option>Ingve</option>
+                                    <option>Jan</option>
+                                    <option>Lars A</option>
+                                    <option>Lars S</option>
+                                    <option>Magnus</option>
+                                    <option>Marianne</option>
+                                    <option>Nils Georg</option>
+                                    <option>Olav</option>
+                                    <option>Richard</option>
+                                    <option>Terje</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputLocation" class="col-lg-2 control-label">Sted</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="inputLocation" placeholder="Sted" ng-model="vm.answer.location">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label for="inputCountry" class="col-lg-2 control-label">Land</label>
+                                <div class="col-lg-10">
+                                    <input type="text" class="form-control" id="inputCountry" placeholder="Land" ng-model="vm.answer.country">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                            <div class="col-lg-10 col-lg-offset-2">                    
+                                <button type="submit" class="btn btn-danger" ng-click="vm.sendAnswer()" ng-disabled="vm.isBusyAnswering">
+                                    <span ng-if="!vm.isBusyAnswering" ng-cloak>Svar</span>
+                                    <span ng-if="vm.isBusyAnswering" ng-cloak><i class="fa fa-spinner fa-pulse fa-fw"></i></span>
+                                </button>
+                            </div>
+                            </div>
+                            <div ng-if="vm.error" ng-cloak class="alert alert-warning">{{vm.error}}</div>
+                        </fieldset>
+                        </form>    
+                        <span ng-if="vm.hasAnswered" ng-cloak>
+                            <h3><i class="fa fa-check fa-2x" style="color:green;padding-right:10px;"></i>Svaret er levert</h3>
+                            <br>
+                            Man kan svare flere ganger, det er det siste svaret som gjelder.</span>
+                 </div>
+            </div>
+            <div class="col col-lg-4">
+                <h3>Poeng</h3>
+                <br/>
+                <div ng-if="vm.highscore.length === 0" ng-cloak>Ingen poeng så langt</div>
+                <div class="col col-lg-10 col-lg-offset-1" ng-if="vm.highscore.length > 0" ng-cloak>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th style="text-align:left;">#</th>
+                                <th style="text-align:left;">Navn</th>
+                                <th style="text-align:center;">Poeng</th>
+                            </tr>                        
+                        </thead>
+                        <tbody>
+                            <tr ng-repeat="h in ::vm.highscore">
+                                <td style="text-align:left;">{{h.Rank}}</td>
+                                <td style="text-align:left;">{{h.User}}</td>
+                                <td style="text-align:center;">{{h.Points}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>                
+            </div>
+        </div>
+        <hr/>   
+            <ul class="nav nav-pills" ng-cloak>
+                <li role="presentation" ng-repeat="cal in ::vm.calendar track by cal.Id">
+                    {{::cal.ForDate | date:'dd'}}.des<br />
+                    <a ng-href="{{::cal.Image}}">
+                        <span ng-if="::cal.Image" class="badge luke" ng-style="{'background-image': 'url({{ ::cal.Image }})'}" ng-cloak>{{::cal.Id}}</span>
+                        <span ng-if="::!cal.Image" class="badge" style="background-color: #d42426;" ng-cloak>{{::cal.Id}}</span>
+                    </a>
+                    <span style="padding-top:6px;"><br/>
+                        <span ng-if="::cal.Location">{{::cal.Location}}, {{::cal.Country}}</span>
+                        <span ng-if="::!cal.Location">&nbsp;</span>
+                    </span>                     
+                </li>
+            </ul>                     
+    </div>  
+        
+</body>
+</html>
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular.min.js"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/lodash/4.11.1/lodash.min.js"></script>
+<script type="text/javascript" src="Angular.js"></script>
