@@ -36,9 +36,9 @@
                 <br/>       
                 <ul class="nav nav-pills" style="padding:0;" ng-cloak>
                     <li role="presentation" ng-repeat="cal in ::vm.calendar track by cal.Id" ng-if="::cal.IsToday" style="padding:0;margin:0;">
-                        Luke #{{::cal.Id}} - {{::cal.ForDate | date:'dd'}}.des<br />
+                        Luke #{{::cal.Id}} - {{::cal.ForDate | date:'d'}}.des<br />
                         <a ng-href="{{::cal.Image}}" target="_blank">
-                            <span class="badge luke" ng-style="{'background-image': 'url({{ ::cal.Image }})'}" ng-cloak>{{::cal.ForDate | date:'dd'}}</span>                        
+                            <span class="badge luke" ng-style="{'background-image': 'url({{ ::cal.Image }})'}" ng-cloak>{{::cal.ForDate | date:'d'}}</span>                        
                         </a>                                        
                     </li>          
                 </ul>   
@@ -129,10 +129,10 @@
         <hr/>   
             <ul class="nav nav-pills" ng-cloak>
                 <li role="presentation" ng-repeat="cal in ::vm.calendar track by cal.Id">
-                    Luke #{{::cal.Id}} - {{::cal.ForDate | date:'dd'}}.des<br />
+                    Luke #{{::cal.Id}} - {{::cal.ForDate | date:'d'}}.des<br />
                     <a ng-href="{{::cal.Image}}">
-                        <span ng-if="::cal.Image" class="badge luke" ng-style="{'background-image': 'url({{ ::cal.Image }})'}" ng-cloak>{{::cal.ForDate | date:'dd'}}</span>
-                        <span ng-if="::!cal.Image" class="badge" style="background-color: #d42426;" ng-cloak>{{::cal.ForDate | date:'dd'}}</span>
+                        <span ng-if="::cal.Image" class="badge luke" ng-style="{'background-image': 'url({{ ::cal.Image }})'}" ng-cloak>{{::cal.ForDate | date:'d'}}</span>
+                        <span ng-if="::!cal.Image" class="badge" style="background-color: #d42426;" ng-cloak>{{::cal.ForDate | date:'d'}}</span>
                     </a>
                     <span style="padding-top:6px;"><br/>
                         <span ng-if="::cal.Location">{{::cal.Location}}, {{::cal.Country}}</span>
