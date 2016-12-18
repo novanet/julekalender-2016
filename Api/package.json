@@ -1,0 +1,10 @@
+{
+  "name": "julekalender-api",
+  "version": "1.0.0",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "lodash": "^4.17.2",
+    "seriate": "^0.8.0"
+  }
+}
